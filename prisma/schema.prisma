@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+enum Role {
+  USER
+  ADMIN 
+}
+
+model User {
+  id Int               @id @default(autoincrement()) @unique
+  first_name String    @db.VarChar(150)
+  last_name String     @db.VarChar(150)
+  email String         @db.VarChar(255) @unique 
+  password String 
+  email_verified_at DateTime? 
+  
+  role Role          @default(ADMIN)
+
+  // Relations
+
+  // Time Stamp
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+  is_active Boolean?   @default(true)
+}
+
+enum Type {
+  INQUIRY
+  JOIN_TEAM
+}
+
+model Contact {
+  id Int               @id @default(autoincrement()) @unique
+  name String          @db.VarChar(150)
+  email String         @db.VarChar(255) @unique 
+  
+  subject String       @db.VarChar(255)
+  message String       @db.VarChar(255)
+  type Type            @default(INQUIRY)
+  file String?         
+
+  // Time Stamp
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+  is_active Boolean?   @default(true)
+}
+
+model Offer{
+  id Int               @id @default(autoincrement()) @unique
+  title String         @db.VarChar(255)
+  description String   @db.VarChar(255)
+
+  // Relations
+  image Image?        
+  
+
+  // Time Stamp
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+  is_active Boolean?   @default(true)
+}
+
+
+model ScholarShip{
+  id Int               @id @default(autoincrement()) @unique
+  title String         @db.VarChar(255)
+  description String   @db.VarChar(255) 
+  deadline DateTime    @default(now())
+
+  // Time Stamp
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+  is_active Boolean?   @default(true)
+  
+}
+
+model Image {
+  id Int               @id @default(autoincrement()) @unique
+  url String
+
+  // Relations
+
+  offer_id Int?       @unique
+  offer Offer?        @relation(fields: [offer_id], references: [id])
+
+  // Time Stamp
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+  is_active Boolean?   @default(true)
+}
