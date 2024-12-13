@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.saveImages = exports.retriveImageUrl = exports.isJSONParseable = void 0;
+exports.saveImage = exports.saveImages = exports.retriveImageUrl = exports.retriveImagesUrl = exports.isJSONParseable = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const isJSONParseable = (str) => {
@@ -28,10 +28,14 @@ const isJSONParseable = (str) => {
     }
 };
 exports.isJSONParseable = isJSONParseable;
-const retriveImageUrl = (item, req) => {
+const retriveImagesUrl = (item, req) => {
     return item.images.map((image) => {
-        return Object.assign(Object.assign({}, image), { image_url: `${req.protocol}://${req.get("host")}${image.image_url}` });
+        return Object.assign(Object.assign({}, image), { image_url: `${req.protocol}://${req.get("host")}${image.url}` });
     });
+};
+exports.retriveImagesUrl = retriveImagesUrl;
+const retriveImageUrl = (item, req) => {
+    return Object.assign(Object.assign({}, item), { image: Object.assign(Object.assign({}, item.image), { url: `${req.protocol}://${req.get("host")}${item.image.url}` }) });
 };
 exports.retriveImageUrl = retriveImageUrl;
 const saveImages = (files, type) => __awaiter(void 0, void 0, void 0, function* () {
@@ -42,7 +46,7 @@ const saveImages = (files, type) => __awaiter(void 0, void 0, void 0, function* 
             const filePath = path_1.default.join(__dirname, "../../public/images", fileName);
             fs_1.default.renameSync(file.filepath, filePath);
             filePaths.push({
-                image_url: `/images/${fileName}`,
+                url: `/images/${fileName}`,
             });
         }
         return filePaths;
@@ -53,3 +57,18 @@ const saveImages = (files, type) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.saveImages = saveImages;
+const saveImage = (file, type) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const fileName = `${type}-${Date.now()}-${file.originalFilename}`;
+        const filePath = path_1.default.join(__dirname, "../../public/images/" + type, fileName);
+        fs_1.default.renameSync(file.filepath, filePath);
+        return {
+            url: `/images/${fileName}`,
+        };
+    }
+    catch (error) {
+        console.log("==================== ERROR IN SAVING IMAGE =================== : ", error);
+        return false;
+    }
+});
+exports.saveImage = saveImage;
