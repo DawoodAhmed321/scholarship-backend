@@ -48,16 +48,17 @@ CREATE TABLE `Offer` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `ScholarShip` (
+CREATE TABLE `Scholarship` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `title` VARCHAR(255) NOT NULL,
     `description` VARCHAR(255) NOT NULL,
     `deadline` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `link` VARCHAR(191) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `is_active` BOOLEAN NULL DEFAULT true,
 
-    UNIQUE INDEX `ScholarShip_id_key`(`id`),
+    UNIQUE INDEX `Scholarship_id_key`(`id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -66,14 +67,19 @@ CREATE TABLE `Image` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `url` VARCHAR(191) NOT NULL,
     `offer_id` INTEGER NULL,
+    `scholarship_id` INTEGER NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `is_active` BOOLEAN NULL DEFAULT true,
 
     UNIQUE INDEX `Image_id_key`(`id`),
     UNIQUE INDEX `Image_offer_id_key`(`offer_id`),
+    UNIQUE INDEX `Image_scholarship_id_key`(`scholarship_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
 ALTER TABLE `Image` ADD CONSTRAINT `Image_offer_id_fkey` FOREIGN KEY (`offer_id`) REFERENCES `Offer`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Image` ADD CONSTRAINT `Image_scholarship_id_fkey` FOREIGN KEY (`scholarship_id`) REFERENCES `Scholarship`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

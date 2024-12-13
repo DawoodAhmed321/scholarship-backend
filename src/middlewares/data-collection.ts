@@ -18,7 +18,6 @@ export const collectData = async (
       }).parse(req);
 
       console.log("====================files: ================= \n", files);
-      // save images to public folder
       if (Object.keys(files).length > 0) {
         fileData = Object.fromEntries(
           Object.entries(files).map(([key, value]) => {

@@ -74,11 +74,15 @@ model Offer{
 }
 
 
-model ScholarShip{
+model Scholarship{
   id Int               @id @default(autoincrement()) @unique
   title String         @db.VarChar(255)
   description String   @db.VarChar(255) 
   deadline DateTime    @default(now())
+  link String
+
+  // Relations
+  image Image[]
 
   // Time Stamp
   created_at DateTime  @default(now())
@@ -95,6 +99,9 @@ model Image {
 
   offer_id Int?       @unique
   offer Offer?        @relation(fields: [offer_id], references: [id])
+
+  scholarship_id Int? @unique
+  scholarship Scholarship? @relation(fields: [scholarship_id], references: [id])
 
   // Time Stamp
   created_at DateTime  @default(now())
