@@ -7,7 +7,7 @@
     "build": "npx tsc",
     "start": "node build/index.js",
     "dev": "nodemon --exec npx ts-node src/index.ts",
-    "seed": "npx ts-node src/db/seed.ts"
+    "seed": "npx ts-node build/db/seed.js"
   },
   "author": "Dawood Ahmed",
   "license": "ISC",
