@@ -48,7 +48,21 @@ export const saveImages = async (files: formidable.File[], type: string) => {
         "../../public/images/" + type,
         fileName
       );
-      fs.renameSync(file.filepath, filePath);
+      // fs.renameSync(file.filepath, filePath);
+
+      fs.copyFile(file.filepath, filePath, (err) => {
+        if (err) {
+          console.error("Error copying file: ", err);
+          throw err;
+        }
+        console.log("File saved successfully!");
+      });
+      // Optionally, delete the temp file after copying (if needed)
+      fs.unlink(file.filepath, (err) => {
+        if (err) {
+          console.error("Error deleting temp file: ", err);
+        }
+      });
       filePaths.push({
         url: `/images/${type}/${fileName}`,
       });
@@ -71,7 +85,19 @@ export const saveImage = async (file: formidable.File, type: string) => {
       "../../public/images/" + type,
       fileName
     );
-    fs.renameSync(file.filepath, filePath);
+    fs.copyFile(file.filepath, filePath, (err) => {
+      if (err) {
+        console.error("Error copying file: ", err);
+        throw err;
+      }
+      console.log("File saved successfully!");
+    });
+    // Optionally, delete the temp file after copying (if needed)
+    fs.unlink(file.filepath, (err) => {
+      if (err) {
+        console.error("Error deleting temp file: ", err);
+      }
+    });
     return {
       url: `/images/${fileName}`,
     };
