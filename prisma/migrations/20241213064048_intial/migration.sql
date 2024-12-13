@@ -74,7 +74,6 @@ CREATE TABLE `Image` (
 
     UNIQUE INDEX `Image_id_key`(`id`),
     UNIQUE INDEX `Image_offer_id_key`(`offer_id`),
-    UNIQUE INDEX `Image_scholarship_id_key`(`scholarship_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

@@ -1,7 +1,6 @@
 import { Request } from "express";
 import formidable from "formidable";
 import fs from "fs";
-import { url } from "inspector";
 import path from "path";
 
 export const isJSONParseable = (str: string) => {
@@ -22,7 +21,7 @@ export const retriveImagesUrl = (item: any, req: Request) => {
   return item.images.map((image: any) => {
     return {
       ...image,
-      image_url: `${req.protocol}://${req.get("host")}${image.url}`,
+      url: `${req.protocol}://${req.get("host")}${image.url}`,
     };
   });
 };
@@ -44,10 +43,14 @@ export const saveImages = async (files: formidable.File[], type: string) => {
     }[] = [];
     for (const file of files) {
       const fileName = `${type}-${Date.now()}-${file.originalFilename}`;
-      const filePath = path.join(__dirname, "../../public/images", fileName);
+      const filePath = path.join(
+        __dirname,
+        "../../public/images/" + type,
+        fileName
+      );
       fs.renameSync(file.filepath, filePath);
       filePaths.push({
-        url: `/images/${fileName}`,
+        url: `/images/${type}/${fileName}`,
       });
     }
     return filePaths;

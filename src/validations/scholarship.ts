@@ -9,3 +9,7 @@ export const addScholarshipSchema = authSchema.keys({
   deadline: Joi.date().required(),
   link: Joi.string().required(),
 });
+
+export const editScholarshipSchema = addScholarshipSchema.keys({
+  id: Joi.number().required(),
+});

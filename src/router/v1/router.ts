@@ -4,6 +4,7 @@ import { collectQueryData } from "../../middlewares/data-collection";
 
 import * as User from "../../controllers/v1/user.controller";
 import * as Offer from "../../controllers/v1/offer.controller";
+import * as Scholarship from "../../controllers/v1/scholarship.controller";
 
 const router = express.Router();
 
@@ -32,20 +33,28 @@ router.delete(
 
 //======================================== Scholarships ==================================
 
-router.get("/scholarships", collectQueryData, Offer.getOffers);
-router.post("/scholarships", superAdminAuthentication, Offer.addOffer);
-router.put("/scholarships", superAdminAuthentication, Offer.updateOffer);
+router.get("/scholarships", collectQueryData, Scholarship.getAllScholarships);
+router.post(
+  "/scholarships",
+  superAdminAuthentication,
+  Scholarship.addScholarship
+);
+router.put(
+  "/scholarships",
+  superAdminAuthentication,
+  Scholarship.updateScholarship
+);
 router.get(
   "/scholarships/:id",
   superAdminAuthentication,
   collectQueryData,
-  Offer.getOfferDetail
+  Scholarship.updateScholarship
 );
 router.delete(
   "/scholarships/:id",
   superAdminAuthentication,
   collectQueryData,
-  Offer.deleteOffer
+  Scholarship.deleteScholarship
 );
 
 export default router;

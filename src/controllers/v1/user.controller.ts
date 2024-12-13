@@ -1,4 +1,3 @@
-import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import { LoginSchema } from "../../validations/user";
 import bcrypt from "bcrypt";
@@ -9,8 +8,7 @@ import {
   successResponse,
   unProcessableEntityResponse,
 } from "../../utils/response";
-
-const prisma = new PrismaClient();
+import { prisma } from "../..";
 
 const getProfile = async (req: Request, res: Response) => {
   try {

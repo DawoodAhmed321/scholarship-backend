@@ -82,7 +82,7 @@ model Scholarship{
   link String
 
   // Relations
-  image Image[]
+  images Image[]
 
   // Time Stamp
   created_at DateTime  @default(now())
@@ -100,7 +100,7 @@ model Image {
   offer_id Int?       @unique
   offer Offer?        @relation(fields: [offer_id], references: [id])
 
-  scholarship_id Int? @unique
+  scholarship_id Int?
   scholarship Scholarship? @relation(fields: [scholarship_id], references: [id])
 
   // Time Stamp
