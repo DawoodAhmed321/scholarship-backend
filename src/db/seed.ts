@@ -203,15 +203,6 @@ const homePageSeed = async () => {
   }
 };
 
-// const seed = async () => {
-//   try {
-//     // await adminSeed().catch(() => {});
-//     await homePageSeed();
-//   } catch (error) {}
-// };
-
-// seed();
-
 const addTestimonials = async () => {
   try {
     TESTIMONIALS.forEach(async (item) => {
@@ -233,4 +224,9 @@ const addTestimonials = async () => {
   }
 };
 
-addTestimonials();
+adminSeed()
+  .catch(() => {})
+  .finally(async () => {
+    await addTestimonials();
+    console.log("==================== SEEDING DONE ===================");
+  });
