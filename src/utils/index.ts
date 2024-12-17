@@ -23,7 +23,9 @@ export const retriveImagesUrl = (item: any, req: Request) => {
   return item.images.map((image: any) => {
     return {
       ...image,
-      url: `${req.protocol}://${IMAGE_URL}${image.url}`,
+      url: `${req.get("X-Forwarded-Proto") || "http"}://${IMAGE_URL}${
+        image.url
+      }`,
     };
   });
 };
@@ -33,7 +35,9 @@ export const retriveImageUrl = (item: any, req: Request) => {
     ...item,
     image: {
       ...item.image,
-      url: `${req.protocol}://${IMAGE_URL}${item.image.url}`,
+      url: `${req.get("X-Forwarded-Proto") || "http"}://${IMAGE_URL}${
+        item.image.url
+      }`,
     },
   };
 };
