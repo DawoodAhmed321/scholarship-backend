@@ -61,8 +61,8 @@ const login = async (req: Request, res: Response) => {
         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
         httpOnly: true,
         sameSite: "none",
-        secure: false,
-        priority: "high",
+        secure: true,
+        priority: "medium",
         path: "/",
       });
       successResponse(res, "User logged in successfully", {
@@ -76,6 +76,7 @@ const login = async (req: Request, res: Response) => {
 };
 
 const logout = async (req: Request, res: Response) => {
+  res.cookie("user_token", "", { maxAge: 0 });
   res.status(200).send({
     message: "User logged out successfully",
     data: null,
