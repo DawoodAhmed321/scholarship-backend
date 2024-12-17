@@ -5,7 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "build": "npx tsc",
-    "start": "node build/index.js",
+    "start": "node build/src/index.js",
     "dev": "nodemon --exec npx ts-node src/index.ts",
     "seed": "npx ts-node src/db/seed.ts"
   },
