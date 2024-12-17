@@ -3,7 +3,7 @@ import formidable from "formidable";
 import fs from "fs";
 import path from "path";
 
-const IMAGE_URL = process.env.IMAGE_URL || "localhost:9000";
+const IMAGE_URL = process.env.IMAGE_URL || "http://localhost:9000";
 
 export const isJSONParseable = (str: string) => {
   try {
@@ -23,9 +23,7 @@ export const retriveImagesUrl = (item: any, req: Request) => {
   return item.images.map((image: any) => {
     return {
       ...image,
-      url: `${req.get("X-Forwarded-Proto") || "http"}://${IMAGE_URL}${
-        image.url
-      }`,
+      url: `${IMAGE_URL}${image.url}`,
     };
   });
 };
@@ -35,9 +33,7 @@ export const retriveImageUrl = (item: any, req: Request) => {
     ...item,
     image: {
       ...item.image,
-      url: `${req.get("X-Forwarded-Proto") || "http"}://${IMAGE_URL}${
-        item.image.url
-      }`,
+      url: `${IMAGE_URL}${item.image.url}`,
     },
   };
 };
@@ -172,7 +168,7 @@ export const retriveFile = (item: any, req: Request) => {
   return {
     ...item,
     file: {
-      url: `${req.protocol}://${IMAGE_URL}/files${item.file}`,
+      url: `${IMAGE_URL}/files${item.file}`,
     },
   };
 };
