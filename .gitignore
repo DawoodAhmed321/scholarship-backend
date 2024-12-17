@@ -2,9 +2,15 @@ node_modules
 # Keep environment variables out of version control
 .env
 
-public/images/offers
-public/images/scholarships
-public/images/testimonials
+/public/images/offers/*
+!/public/images/offers/
+
+/public/images/scholarships/*
+!/public/images/scholarships/
+
+/public/images/testimonials/*
+!/public/images/testimonials/
+
 public/files
 
 # Build
