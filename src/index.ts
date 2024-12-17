@@ -7,7 +7,6 @@ import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import router from "./router/v1/router";
 import formidable from "formidable";
-import { isJSONParseable } from "./utils";
 
 const app = express();
 

@@ -21,7 +21,7 @@ export const collectData = async (
 
     if (req.headers.authorization) {
       const token = req.headers.authorization.split(" ")[1];
-      if (!token.includes("null") && !token.includes("undefined")) {
+      if (token && !token.includes("null") && !token.includes("undefined")) {
         const decoded = decodeToken(token);
         req.body.user_id = decoded.id;
       }
