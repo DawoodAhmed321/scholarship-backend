@@ -2,8 +2,10 @@ import express from "express";
 import { superAdminAuthentication } from "../../middlewares/authenticate";
 import { collectQueryData } from "../../middlewares/data-collection";
 
+import * as Home from "../../controllers/v1/home.controller";
 import * as User from "../../controllers/v1/user.controller";
 import * as Offer from "../../controllers/v1/offer.controller";
+import * as Contact from "../../controllers/v1/contact.controller";
 import * as Scholarship from "../../controllers/v1/scholarship.controller";
 
 const router = express.Router();
@@ -26,8 +28,8 @@ router.get(
 );
 router.delete(
   "/offers/:id",
-  superAdminAuthentication,
   collectQueryData,
+  superAdminAuthentication,
   Offer.deleteOffer
 );
 
@@ -46,15 +48,50 @@ router.put(
 );
 router.get(
   "/scholarships/:id",
-  superAdminAuthentication,
   collectQueryData,
+  superAdminAuthentication,
   Scholarship.updateScholarship
 );
 router.delete(
   "/scholarships/:id",
-  superAdminAuthentication,
   collectQueryData,
+  superAdminAuthentication,
   Scholarship.deleteScholarship
 );
+
+//======================================== Home Page ==================================
+
+router.get("/home", Home.getHome);
+router.get("/testimonials", Home.getTestimonials);
+router.post("/home", superAdminAuthentication, Home.addHomePage);
+router.get("/testimonials/:id", collectQueryData, Home.getTestimonialDetails);
+router.post("/testimonials", superAdminAuthentication, Home.addTestimonial);
+router.put("/testimonials", superAdminAuthentication, Home.editTestimonial);
+router.delete(
+  "/testimonials/:id",
+  collectQueryData,
+  superAdminAuthentication,
+  Home.deleteTestimonial
+);
+
+//======================================== Contact ==================================
+router.post("/contacts", Contact.addContact);
+router.post("/join-teams", Contact.joinTeam);
+router.get(
+  "/contacts",
+  collectQueryData,
+  superAdminAuthentication,
+  Contact.getAllContact
+);
+router.get(
+  "/join-teams",
+  collectQueryData,
+  superAdminAuthentication,
+  Contact.getAllJoinTeam
+);
+
+//======================================== Dashboard ==================================
+
+router.get("/dashboard", superAdminAuthentication, Contact.getDashboard);
 
 export default router;

@@ -41,6 +41,7 @@ const authenticate_1 = require("../../middlewares/authenticate");
 const data_collection_1 = require("../../middlewares/data-collection");
 const User = __importStar(require("../../controllers/v1/user.controller"));
 const Offer = __importStar(require("../../controllers/v1/offer.controller"));
+const Scholarship = __importStar(require("../../controllers/v1/scholarship.controller"));
 const router = express_1.default.Router();
 //======================================== User ==================================
 router.get("/profile", authenticate_1.superAdminAuthentication, User.getProfile);
@@ -53,9 +54,9 @@ router.put("/offers", authenticate_1.superAdminAuthentication, Offer.updateOffer
 router.get("/offers/:id", authenticate_1.superAdminAuthentication, data_collection_1.collectQueryData, Offer.getOfferDetail);
 router.delete("/offers/:id", authenticate_1.superAdminAuthentication, data_collection_1.collectQueryData, Offer.deleteOffer);
 //======================================== Scholarships ==================================
-router.get("/scholarships", data_collection_1.collectQueryData, Offer.getOffers);
-router.post("/scholarships", authenticate_1.superAdminAuthentication, Offer.addOffer);
-router.put("/scholarships", authenticate_1.superAdminAuthentication, Offer.updateOffer);
-router.get("/scholarships/:id", authenticate_1.superAdminAuthentication, data_collection_1.collectQueryData, Offer.getOfferDetail);
-router.delete("/scholarships/:id", authenticate_1.superAdminAuthentication, data_collection_1.collectQueryData, Offer.deleteOffer);
+router.get("/scholarships", data_collection_1.collectQueryData, Scholarship.getAllScholarships);
+router.post("/scholarships", authenticate_1.superAdminAuthentication, Scholarship.addScholarship);
+router.put("/scholarships", authenticate_1.superAdminAuthentication, Scholarship.updateScholarship);
+router.get("/scholarships/:id", authenticate_1.superAdminAuthentication, data_collection_1.collectQueryData, Scholarship.updateScholarship);
+router.delete("/scholarships/:id", authenticate_1.superAdminAuthentication, data_collection_1.collectQueryData, Scholarship.deleteScholarship);
 exports.default = router;

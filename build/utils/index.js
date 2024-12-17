@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.saveImage = exports.saveImages = exports.retriveImageUrl = exports.retriveImagesUrl = exports.isJSONParseable = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
+const IMAGE_URL = process.env.IMAGE_URL || "localhost:9000";
 const isJSONParseable = (str) => {
     try {
         if (str.includes("{") ||
@@ -30,12 +31,12 @@ const isJSONParseable = (str) => {
 exports.isJSONParseable = isJSONParseable;
 const retriveImagesUrl = (item, req) => {
     return item.images.map((image) => {
-        return Object.assign(Object.assign({}, image), { image_url: `${req.protocol}://${req.get("host")}${image.url}` });
+        return Object.assign(Object.assign({}, image), { url: `${req.protocol}://${IMAGE_URL}${image.url}` });
     });
 };
 exports.retriveImagesUrl = retriveImagesUrl;
 const retriveImageUrl = (item, req) => {
-    return Object.assign(Object.assign({}, item), { image: Object.assign(Object.assign({}, item.image), { url: `${req.protocol}://${req.get("host")}${item.image.url}` }) });
+    return Object.assign(Object.assign({}, item), { image: Object.assign(Object.assign({}, item.image), { url: `${req.protocol}://${IMAGE_URL}${item.image.url}` }) });
 };
 exports.retriveImageUrl = retriveImageUrl;
 const saveImages = (files, type) => __awaiter(void 0, void 0, void 0, function* () {
@@ -43,10 +44,23 @@ const saveImages = (files, type) => __awaiter(void 0, void 0, void 0, function* 
         let filePaths = [];
         for (const file of files) {
             const fileName = `${type}-${Date.now()}-${file.originalFilename}`;
-            const filePath = path_1.default.join(__dirname, "../../public/images", fileName);
-            fs_1.default.renameSync(file.filepath, filePath);
+            const filePath = path_1.default.join(__dirname, "../../public/images/" + type, fileName);
+            // fs.renameSync(file.filepath, filePath);
+            fs_1.default.copyFile(file.filepath, filePath, (err) => {
+                if (err) {
+                    console.error("Error copying file: ", err);
+                    throw err;
+                }
+                console.log("File saved successfully!");
+            });
+            // Optionally, delete the temp file after copying (if needed)
+            fs_1.default.unlink(file.filepath, (err) => {
+                if (err) {
+                    console.error("Error deleting temp file: ", err);
+                }
+            });
             filePaths.push({
-                url: `/images/${fileName}`,
+                url: `/images/${type}/${fileName}`,
             });
         }
         return filePaths;
@@ -61,7 +75,19 @@ const saveImage = (file, type) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         const fileName = `${type}-${Date.now()}-${file.originalFilename}`;
         const filePath = path_1.default.join(__dirname, "../../public/images/" + type, fileName);
-        fs_1.default.renameSync(file.filepath, filePath);
+        fs_1.default.copyFile(file.filepath, filePath, (err) => {
+            if (err) {
+                console.error("Error copying file: ", err);
+                throw err;
+            }
+            console.log("File saved successfully!");
+        });
+        // Optionally, delete the temp file after copying (if needed)
+        fs_1.default.unlink(file.filepath, (err) => {
+            if (err) {
+                console.error("Error deleting temp file: ", err);
+            }
+        });
         return {
             url: `/images/${fileName}`,
         };

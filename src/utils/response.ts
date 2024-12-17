@@ -43,6 +43,7 @@ export const notFoundResponse = (res: Response, message?: string) => {
 };
 
 export const unAuthorizedResponse = (res: Response, message?: string) => {
+  res.cookie("user_token", "", { maxAge: 0 });
   return res.status(401).send({
     message: message || "Unauthorized Please Login",
     data: null,

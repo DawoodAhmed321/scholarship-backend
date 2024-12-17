@@ -34,7 +34,12 @@ const addOffer = async (req: Request, res: Response) => {
         },
       },
       include: {
-        image: true,
+        image: {
+          select: {
+            url: true,
+            id: true,
+          },
+        },
       },
     });
     successResponse(
@@ -62,7 +67,7 @@ const deleteOffer = async (req: Request, res: Response) => {
 
     const offer = await prisma.offer.findUnique({
       where: {
-        id,
+        id: +id,
       },
     });
     if (!offer) {
@@ -72,7 +77,7 @@ const deleteOffer = async (req: Request, res: Response) => {
 
     await prisma.offer.delete({
       where: {
-        id,
+        id: +id,
       },
     });
 
@@ -91,17 +96,51 @@ const getOffers = async (req: Request, res: Response) => {
     }
 
     const offers = await prisma.offer.findMany({
+      where: value.user_id
+        ? {
+            title: {
+              contains: value.q,
+            },
+            created_at: value.start_date &&
+              value.end_date && {
+                gte: new Date(value.start_date),
+                lte: new Date(value.end_date),
+              },
+          }
+        : {
+            is_active: true,
+          },
       skip: (value.page - 1) * value.limit,
       take: value.limit,
       orderBy: {
         created_at: "desc",
       },
       include: {
-        image: true,
+        image: {
+          select: {
+            url: true,
+            id: true,
+          },
+        },
       },
     });
 
-    const count = await prisma.offer.count();
+    const count = await prisma.offer.count({
+      where: value.user_id
+        ? {
+            title: {
+              contains: value.q,
+            },
+            created_at: value.start_date &&
+              value.end_date && {
+                gte: new Date(value.start_date),
+                lte: new Date(value.end_date),
+              },
+          }
+        : {
+            is_active: true,
+          },
+    });
 
     successResponse(
       res,
@@ -136,7 +175,12 @@ const getOfferDetail = async (req: Request, res: Response) => {
         id: +id,
       },
       include: {
-        image: true,
+        image: {
+          select: {
+            url: true,
+            id: true,
+          },
+        },
       },
     });
     if (!offer) {
@@ -190,7 +234,12 @@ const updateOffer = async (req: Request, res: Response) => {
         },
       },
       include: {
-        image: true,
+        image: {
+          select: {
+            url: true,
+            id: true,
+          },
+        },
       },
     });
 

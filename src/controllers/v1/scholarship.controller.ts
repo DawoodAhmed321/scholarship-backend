@@ -1,5 +1,5 @@
 import { prisma } from "../..";
-import { retriveImagesUrl, retriveImageUrl, saveImages } from "../../utils";
+import { retriveImagesUrl, saveImages } from "../../utils";
 import {
   successResponse,
   internalServerError,
@@ -69,7 +69,7 @@ const deleteScholarship = async (req: Request, res: Response) => {
     const { id } = req.body;
     const data = await prisma.scholarship.findUnique({
       where: {
-        id: Number(id),
+        id: +id,
       },
     });
     if (!data) {
@@ -78,7 +78,7 @@ const deleteScholarship = async (req: Request, res: Response) => {
     }
     await prisma.scholarship.delete({
       where: {
-        id: id,
+        id: +id,
       },
     });
     successResponse(res, "Scholarship deleted successfully", null);
@@ -97,6 +97,25 @@ const getAllScholarships = async (req: Request, res: Response) => {
       return;
     }
     const scholarships = await prisma.scholarship.findMany({
+      skip: (value.page - 1) * value.limit,
+      take: value.limit,
+      orderBy: {
+        created_at: "desc",
+      },
+      where: value.user_id
+        ? {
+            title: {
+              contains: value.q,
+            },
+            created_at: value.start_date &&
+              value.end_date && {
+                gte: new Date(value.start_date),
+                lte: new Date(value.end_date),
+              },
+          }
+        : {
+            is_active: true,
+          },
       include: {
         images: {
           select: {
@@ -105,11 +124,23 @@ const getAllScholarships = async (req: Request, res: Response) => {
           },
         },
       },
-      orderBy: {
-        created_at: "desc",
-      },
     });
-    const count = await prisma.scholarship.count();
+    const count = await prisma.scholarship.count({
+      where: value.user_id
+        ? {
+            title: {
+              contains: value.q,
+            },
+            created_at: value.start_date &&
+              value.end_date && {
+                gte: new Date(value.start_date),
+                lte: new Date(value.end_date),
+              },
+          }
+        : {
+            is_active: true,
+          },
+    });
 
     successResponse(
       res,
@@ -182,11 +213,13 @@ const updateScholarship = async (req: Request, res: Response) => {
       errorResponse(res, "Image upload failed");
       return;
     }
+
     const data = await prisma.scholarship.findUnique({
       where: {
         id: value.id,
       },
     });
+
     if (!data) {
       notFoundResponse(res, "Scholarship not found");
       return;

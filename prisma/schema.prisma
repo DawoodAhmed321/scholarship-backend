@@ -45,7 +45,7 @@ enum Type {
 model Contact {
   id Int               @id @default(autoincrement()) @unique
   name String          @db.VarChar(150)
-  email String         @db.VarChar(255) @unique 
+  email String         @db.VarChar(255) 
   
   subject String       @db.VarChar(255)
   message String       @db.VarChar(255)
@@ -91,6 +91,32 @@ model Scholarship{
   
 }
 
+model Testimonials {
+  id Int               @id @default(autoincrement()) @unique
+  name String          @db.VarChar(255)
+  description String   @db.VarChar(255)
+
+  // Relations
+  image Image?
+
+
+  // Time Stamp
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+}
+
+model Home{
+  id Int               @id @default(autoincrement()) @unique
+  title String         @db.VarChar(255)
+  
+
+  // Time Stamp
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+}
+
+
+
 model Image {
   id Int               @id @default(autoincrement()) @unique
   url String
@@ -102,6 +128,9 @@ model Image {
 
   scholarship_id Int?
   scholarship Scholarship? @relation(fields: [scholarship_id], references: [id])
+
+  testimonials_id Int? @unique  
+  testimonials Testimonials? @relation(fields: [testimonials_id], references: [id])
 
   // Time Stamp
   created_at DateTime  @default(now())

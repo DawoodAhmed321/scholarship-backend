@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import formidable from "formidable";
 import { decodeToken } from "./authenticate";
-import { isJSONParseable } from "../utils";
 
 export const collectData = async (
   req: Request,
@@ -9,38 +7,9 @@ export const collectData = async (
   next: NextFunction
 ) => {
   try {
-    let formData = {};
-    let fileData = {};
-
-    if (req.headers["content-type"]?.includes("multipart/form-data")) {
-      let [form, files] = await formidable({
-        multiples: true,
-      }).parse(req);
-
-      console.log("====================files: ================= \n", files);
-      if (Object.keys(files).length > 0) {
-        fileData = Object.fromEntries(
-          Object.entries(files).map(([key, value]) => {
-            return [
-              key,
-              value.map((file) => {
-                return file;
-              }),
-            ];
-          })
-        );
-      }
-
-      formData = Object.fromEntries(
-        Object.entries(form).map(([key, value]) => {
-          if (isJSONParseable(value[0])) {
-            return [key, JSON.parse(value[0]) || value];
-          }
-          return [key, value[0] || value];
-        })
-      );
-    }
-
+    const { formData, fileData } = req.body;
+    delete req.body.formData;
+    delete req.body.fileData;
     const data = {
       ...req.body,
       ...req.query,

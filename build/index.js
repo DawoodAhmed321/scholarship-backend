@@ -15,8 +15,8 @@ const router_1 = __importDefault(require("./router/v1/router"));
 const app = (0, express_1.default)();
 app.use((0, helmet_1.default)());
 app.use((0, cors_1.default)({
+    origin: ["http://localhost:3000"],
     credentials: true,
-    origin: "*",
 }));
 app.use(body_parser_1.default.json());
 app.use((0, cookie_parser_1.default)());
@@ -27,7 +27,7 @@ app.use("/api/v1", router_1.default);
 // set public folder
 app.use(express_1.default.static("public"));
 exports.prisma = new client_1.PrismaClient();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 9000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

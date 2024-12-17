@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { notFoundResponse, unAuthorizedResponse } from "../utils/response";
+import { unAuthorizedResponse } from "../utils/response";
 
 const SECRET_KEY = process.env.JWT_SECRET || "XDAWOODSECRETKEY";
 
@@ -64,7 +64,8 @@ export const superAdminAuthentication = (
       "==================== ERROR IN ADMIN AUTH  =================== : ",
       error
     );
-    next();
+    unAuthorizedResponse(res);
+    return;
   }
 };
 

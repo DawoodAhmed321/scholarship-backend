@@ -63,17 +63,42 @@ CREATE TABLE `Scholarship` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `Testimonials` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255) NOT NULL,
+    `description` VARCHAR(255) NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    UNIQUE INDEX `Testimonials_id_key`(`id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Home` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `title` VARCHAR(255) NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    UNIQUE INDEX `Home_id_key`(`id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `Image` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `url` VARCHAR(191) NOT NULL,
     `offer_id` INTEGER NULL,
     `scholarship_id` INTEGER NULL,
+    `testimonials_id` INTEGER NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `is_active` BOOLEAN NULL DEFAULT true,
 
     UNIQUE INDEX `Image_id_key`(`id`),
     UNIQUE INDEX `Image_offer_id_key`(`offer_id`),
+    UNIQUE INDEX `Image_testimonials_id_key`(`testimonials_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -82,3 +107,6 @@ ALTER TABLE `Image` ADD CONSTRAINT `Image_offer_id_fkey` FOREIGN KEY (`offer_id`
 
 -- AddForeignKey
 ALTER TABLE `Image` ADD CONSTRAINT `Image_scholarship_id_fkey` FOREIGN KEY (`scholarship_id`) REFERENCES `Scholarship`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Image` ADD CONSTRAINT `Image_testimonials_id_fkey` FOREIGN KEY (`testimonials_id`) REFERENCES `Testimonials`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

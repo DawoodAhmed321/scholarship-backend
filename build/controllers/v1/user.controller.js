@@ -13,12 +13,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.logout = exports.login = exports.getProfile = void 0;
-const client_1 = require("@prisma/client");
 const user_1 = require("../../validations/user");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const authenticate_1 = require("../../middlewares/authenticate");
 const response_1 = require("../../utils/response");
-const prisma = new client_1.PrismaClient();
+const __1 = require("../..");
 const getProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req.body.user_id;
@@ -26,7 +25,7 @@ const getProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             (0, response_1.errorResponse)(res, "User id is required");
             return;
         }
-        const user = yield prisma.user.findUnique({
+        const user = yield __1.prisma.user.findUnique({
             where: {
                 id,
             },
@@ -50,7 +49,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             (0, response_1.errorResponse)(res, error.details[0].message);
         }
         else {
-            const user = yield prisma.user.findUnique({
+            const user = yield __1.prisma.user.findUnique({
                 where: {
                     email: value.email,
                     role: "ADMIN",

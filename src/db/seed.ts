@@ -3,189 +3,135 @@ import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
-//   try {
-//     const user = await prisma.user.create({
-//       data: {
-//         first_name: "John",
-//         last_name: "Doe",
-//         email: "2x8I7@example.com",
-//         password: await bcrypt.hash("12345678", 10),
-//       },
-//     });
-//     console.log(
-//       "==================== SEEDING User SUCCESS =================== : ",
-//       user
-//     );
-//     const option1 = await prisma.option.create({
-//       data: {
-//         name: "Gold",
-//         price: 10,
-//         out_of_stock: false,
-//         is_active: true,
-//         created_at: new Date(),
-//         updated_at: new Date(),
-//       },
-//     });
+const TESTIMONIALS = [
+  {
+    id: 1,
+    name: "John Doe",
+    image: "/images/testimonial.webp",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, repellat.",
+  },
+  {
+    id: 2,
+    name: "Syed Saad",
+    image: "/images/testimonial.webp",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, repellat.",
+  },
+  {
+    id: 3,
+    name: "Dawood Ahmed",
+    image: "/images/testimonial.webp",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, repellat. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, repellat.",
+  },
+  {
+    id: 4,
+    name: "Syed Saad",
+    image: "/images/testimonial.webp",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, repellat.",
+  },
 
-//     const option2 = await prisma.option.create({
-//       data: {
-//         name: "Silver",
-//         price: 10,
-//         out_of_stock: false,
-//         is_active: true,
-//         created_at: new Date(),
-//         updated_at: new Date(),
-//       },
-//     });
-//     console.log(
-//       "==================== SEEDING Option SUCCESS =================== : ",
-//       option1,
-//       option2
-//     );
-
-//     const attribute1 = await prisma.attribute.create({
-//       data: {
-//         name: "Material",
-//         attribute_type: "radio",
-//         is_active: true,
-//         options: {
-//           connect: [
-//             {
-//               id: option1.id,
-//             },
-//             {
-//               id: option2.id,
-//             },
-//           ],
-//         },
-//         created_at: new Date(),
-//         updated_at: new Date(),
-//       },
-//     });
-
-//     const attribute2 = await prisma.attribute.create({
-//       data: {
-//         name: "Color",
-//         attribute_type: "checkbox",
-//         is_active: true,
-//         options: {
-//           connect: [
-//             {
-//               id: option1.id,
-//             },
-//           ],
-//         },
-//         created_at: new Date(),
-//         updated_at: new Date(),
-//       },
-//     });
-
-//     console.log(
-//       "==================== SEEDING Attribute SUCCESS =================== : ",
-//       attribute1,
-//       attribute2
-//     );
-
-//     const size1 = await prisma.size.create({
-//       data: {
-//         name: "Small",
-//         price: 10,
-//         is_active: true,
-//         out_of_stock: false,
-//         created_at: new Date(),
-//         updated_at: new Date(),
-//         arrtributes: {
-//           connect: [
-//             {
-//               id: attribute1.id,
-//             },
-//             {
-//               id: attribute2.id,
-//             },
-//           ],
-//         },
-//       },
-//     });
-
-//     const size2 = await prisma.size.create({
-//       data: {
-//         name: "Medium",
-//         price: 10,
-//         is_active: true,
-//         out_of_stock: false,
-//         created_at: new Date(),
-//         updated_at: new Date(),
-//         arrtributes: {
-//           connect: [
-//             {
-//               id: attribute1.id,
-//             },
-//           ],
-//         },
-//       },
-//     });
-
-//     console.log(
-//       "==================== SEEDING Size SUCCESS =================== : ",
-//       size1,
-//       size2
-//     );
-
-//     const category = await prisma.category.create({
-//       data: {
-//         name: "Category 1",
-//         slug: "category-1",
-//         description: "Category 1 description",
-//         created_at: new Date(),
-//         updated_at: new Date(),
-//       },
-//     });
-
-//     console.log(
-//       "==================== SEEDING Category SUCCESS =================== : ",
-//       category
-//     );
-
-//     const product = await prisma.product.create({
-//       data: {
-//         category: {
-//           connect: {
-//             id: category.id,
-//           },
-//         },
-//         name: "Product 1",
-//         slug: "product-1",
-//         description: "Product 1 description",
-//         polpularity: 10,
-//         tags: "tag1,tag2",
-//         price: 10,
-//         is_active: true,
-//         sizes: {
-//           connect: [
-//             {
-//               id: size1.id,
-//             },
-//             {
-//               id: size2.id,
-//             },
-//           ],
-//         },
-//         created_at: new Date(),
-//         updated_at: new Date(),
-//       },
-//     });
-
-//     console.log(
-//       "==================== SEEDING Product SUCCESS =================== : ",
-//       product
-//     );
-//   } catch (error) {
-//     console.log(
-//       "==================== SEEDING ERROR =================== : ",
-//       error
-//     );
-//   }
-// };
+  {
+    id: 5,
+    name: "Marry Doe",
+    image: "/images/testimonial.webp",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, repellat.",
+  },
+  {
+    id: 6,
+    name: "Taha Khan",
+    image: "/images/testimonial.webp",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, repellat.",
+  },
+  {
+    id: 7,
+    name: "Sasuke Uchiha",
+    image: "/images/testimonial.webp",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, repellat.",
+  },
+  {
+    id: 8,
+    name: "Naruto Uzumaki",
+    image: "/images/testimonial.webp",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, repellat.",
+  },
+  {
+    id: 9,
+    name: "Sakura Haruno",
+    image: "/images/testimonial.webp",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, repellat.",
+  },
+  {
+    id: 10,
+    name: "Madara Uchiha",
+    image: "/images/testimonial.webp",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, repellat.",
+  },
+  {
+    id: 11,
+    name: "Nagato Uzumaki",
+    image: "/images/testimonial.webp",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, repellat.",
+  },
+  {
+    id: 12,
+    name: "Itachi Uchiha",
+    image: "/images/testimonial.webp",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, repellat.",
+  },
+  {
+    id: 13,
+    name: "Sunade Senju",
+    image: "/images/testimonial.webp",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, repellat.",
+  },
+  {
+    id: 14,
+    name: "Hashirama Senju",
+    image: "/images/testimonial.webp",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, repellat.",
+  },
+  {
+    id: 15,
+    name: "Tobirama Senju",
+    image: "/images/testimonial.webp",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, repellat.",
+  },
+  {
+    id: 16,
+    name: "Jiraiya Senju",
+    image: "/images/testimonial.webp",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, repellat.",
+  },
+  {
+    id: 17,
+    name: "Hinata Hyuga",
+    image: "/images/testimonial.webp",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, repellat.",
+  },
+  {
+    id: 18,
+    name: "Neji Hyuga",
+    image: "/images/testimonial.webp",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, repellat.",
+  },
+];
 
 const adminSeed = async () => {
   try {
@@ -212,4 +158,79 @@ const adminSeed = async () => {
   }
 };
 
-adminSeed();
+const homePageSeed = async () => {
+  try {
+    const homeData = await prisma.$transaction(async (tx) => {
+      const home = await tx.home.upsert({
+        update: {
+          title: "We Are A Scholarship Agency That Thinks Differently",
+        },
+        where: {
+          id: 1,
+        },
+        create: {
+          title: "We Are A Scholarship Agency That Thinks Differently",
+        },
+      });
+
+      const testimonials = await tx.testimonials.create({
+        data: {
+          name: TESTIMONIALS[0].name,
+          description: TESTIMONIALS[0].description,
+          image: {
+            create: {
+              url: TESTIMONIALS[0].image,
+              is_active: true,
+            },
+          },
+        },
+      });
+
+      return {
+        home,
+        testimonials: [testimonials],
+      };
+    });
+    console.log(
+      "==================== Home SEEDING SUCCESS =================== : ",
+      homeData
+    );
+  } catch (error) {
+    console.log(
+      "==================== Home SEEDING ERROR =================== : ",
+      error
+    );
+  }
+};
+
+// const seed = async () => {
+//   try {
+//     // await adminSeed().catch(() => {});
+//     await homePageSeed();
+//   } catch (error) {}
+// };
+
+// seed();
+
+const addTestimonials = async () => {
+  try {
+    TESTIMONIALS.forEach(async (item) => {
+      await prisma.testimonials.create({
+        data: {
+          name: item.name,
+          description: item.description,
+          image: {
+            create: {
+              url: item.image,
+              is_active: true,
+            },
+          },
+        },
+      });
+    });
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
+addTestimonials();

@@ -4,5 +4,9 @@ node_modules
 
 public/images/offers
 public/images/scholarships
+public/images/testimonials
+public/files
+
+# Build
 
 build
