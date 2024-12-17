@@ -10,6 +10,8 @@ import {
 } from "../../utils/response";
 import { prisma } from "../..";
 
+const isProduction = process.env.PRODUCTION_MODE === "production";
+
 const getProfile = async (req: Request, res: Response) => {
   try {
     const id = req.body.user_id;
@@ -61,9 +63,10 @@ const login = async (req: Request, res: Response) => {
         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
         httpOnly: true,
         sameSite: "none",
-        secure: true,
+        secure: isProduction ? true : false,
         priority: "medium",
         path: "/",
+        domain: isProduction ? ".scholarshipfolder.com" : "localhost",
       });
       successResponse(res, "User logged in successfully", {
         ...user,
