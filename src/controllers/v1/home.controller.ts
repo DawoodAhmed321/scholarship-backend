@@ -21,11 +21,14 @@ const addHomePage = async (req: Request, res: Response) => {
       errorResponse(res, error.details[0].message);
       return;
     }
-    const home = await prisma.home.update({
+    const home = await prisma.home.upsert({
       where: {
         id: 1,
       },
-      data: {
+      create: {
+        title: value.title,
+      },
+      update: {
         title: value.title,
       },
     });
