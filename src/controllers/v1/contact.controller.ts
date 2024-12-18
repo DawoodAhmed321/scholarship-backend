@@ -3,6 +3,7 @@ import {
   getCurrentWeeksMonday,
   getPreviousWeeksMonday,
   retriveFile,
+  saveCSV,
   saveFile,
 } from "../../utils";
 import {
@@ -11,8 +12,13 @@ import {
   successResponse,
 } from "../../utils/response";
 import { paginationSchema } from "../../validations";
-import { contactSchema, joinTeamSchema } from "../../validations/contact";
+import {
+  contactSchema,
+  exportSchema,
+  joinTeamSchema,
+} from "../../validations/contact";
 import { Request, Response } from "express";
+import fs from "fs";
 
 const addContact = async (req: Request, res: Response) => {
   try {
@@ -40,6 +46,66 @@ const addContact = async (req: Request, res: Response) => {
       },
     });
     successResponse(res, "Contact created successfully", contact);
+  } catch (error) {
+    internalServerError(res, error);
+  }
+};
+
+const exportContacts = async (req: Request, res: Response) => {
+  try {
+    const { error, value } = exportSchema.validate(req.body);
+
+    if (error) {
+      errorResponse(res, error.details[0].message);
+      return;
+    }
+
+    const contacts = await prisma.contact.findMany({
+      where: {
+        type: value.type == "Contacts" ? "INQUIRY" : "JOIN_TEAM",
+        created_at: {
+          gte: new Date(value.start_date),
+          lte: new Date(value.end_date),
+        },
+      },
+      orderBy: {
+        created_at: "desc",
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        message: true,
+        subject: true,
+        type: true,
+        created_at: true,
+        file: value.type == "Contacts" ? false : true,
+      },
+    });
+
+    const csvFile = await saveCSV(
+      contacts,
+      value.type == "Contacts" ? "INQUIRY" : "JOIN_TEAM"
+    );
+    if (csvFile) {
+      res.download(csvFile, (error) => {
+        if (error) {
+          internalServerError(res, error);
+        } else {
+          fs.unlink(csvFile, (err) => {
+            if (err) {
+              console.error("Error deleting temp file: ", err);
+            }
+            console.log("CSV deleted successfully!");
+          });
+        }
+      });
+      return;
+    }
+
+    errorResponse(res, "Error in creating csv file");
+
+    // create a csv file
   } catch (error) {
     internalServerError(res, error);
   }
@@ -169,6 +235,14 @@ const getAllContact = async (req: Request, res: Response) => {
     const contacts = await prisma.contact.findMany({
       where: {
         type: "INQUIRY",
+        name: {
+          contains: value.q,
+        },
+        created_at: value.start_date &&
+          value.end_date && {
+            gte: new Date(value.start_date),
+            lte: new Date(value.end_date),
+          },
       },
       skip: (value.page - 1) * value.limit,
       take: value.limit,
@@ -188,6 +262,14 @@ const getAllContact = async (req: Request, res: Response) => {
     const count = await prisma.contact.count({
       where: {
         type: "INQUIRY",
+        name: {
+          contains: value.q,
+        },
+        created_at: value.start_date &&
+          value.end_date && {
+            gte: new Date(value.start_date),
+            lte: new Date(value.end_date),
+          },
       },
     });
 
@@ -213,6 +295,14 @@ const getAllJoinTeam = async (req: Request, res: Response) => {
     const contacts = await prisma.contact.findMany({
       where: {
         type: "JOIN_TEAM",
+        name: {
+          contains: value.q,
+        },
+        created_at: value.start_date &&
+          value.end_date && {
+            gte: new Date(value.start_date),
+            lte: new Date(value.end_date),
+          },
       },
       skip: (value.page - 1) * value.limit,
       take: value.limit,
@@ -233,6 +323,14 @@ const getAllJoinTeam = async (req: Request, res: Response) => {
     const count = await prisma.contact.count({
       where: {
         type: "JOIN_TEAM",
+        name: {
+          contains: value.q,
+        },
+        created_at: value.start_date &&
+          value.end_date && {
+            gte: new Date(value.start_date),
+            lte: new Date(value.end_date),
+          },
       },
     });
 
@@ -271,7 +369,7 @@ const joinTeam = async (req: Request, res: Response) => {
         name: value.name,
         email: value.email,
         message: value.message,
-        subject: "Join Team",
+        subject: value.subject,
         type: "JOIN_TEAM",
         file: file.url,
       },
@@ -286,4 +384,11 @@ const joinTeam = async (req: Request, res: Response) => {
   }
 };
 
-export { addContact, getAllContact, getAllJoinTeam, getDashboard, joinTeam };
+export {
+  addContact,
+  exportContacts,
+  getAllContact,
+  getAllJoinTeam,
+  getDashboard,
+  joinTeam,
+};

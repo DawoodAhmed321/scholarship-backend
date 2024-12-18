@@ -90,6 +90,8 @@ router.get(
   Contact.getAllJoinTeam
 );
 
+router.get("/report", superAdminAuthentication, Contact.exportContacts);
+
 //======================================== Dashboard ==================================
 
 router.get("/dashboard", superAdminAuthentication, Contact.getDashboard);

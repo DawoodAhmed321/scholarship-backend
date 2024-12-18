@@ -11,7 +11,11 @@ node_modules
 /public/images/testimonials/*
 !/public/images/testimonials/
 
-public/files
+/public/files/*
+!/public/files/
+
+/public/csv/*
+!/public/csv/
 
 # Build
 
