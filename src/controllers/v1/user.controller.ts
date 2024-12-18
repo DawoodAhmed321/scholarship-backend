@@ -66,7 +66,6 @@ const login = async (req: Request, res: Response) => {
         secure: isProduction ? true : false,
         priority: "medium",
         path: "/",
-        domain: isProduction ? ".scholarshipfolder.com" : "localhost",
       });
       successResponse(res, "User logged in successfully", {
         ...user,
