@@ -10,7 +10,11 @@ import formidable from "formidable";
 
 const app = express();
 
-app.use(helmet());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
+);
 app.use(
   cors({
     origin: [
