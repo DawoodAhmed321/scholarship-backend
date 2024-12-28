@@ -97,6 +97,12 @@ model Testimonials {
   name String          @db.VarChar(255)
   description String   @db.VarChar(255)
 
+  university String?   @db.LongText
+  program String?      @db.LongText
+  scholarshipProgram String? @db.LongText
+  session String?      @db.LongText
+
+
   // Relations
   image Image?
 
@@ -109,6 +115,18 @@ model Testimonials {
 model Home{
   id Int               @id @default(autoincrement()) @unique
   title String         @db.VarChar(255)
+
+
+  facebook String?      @db.LongText
+  instagram String?     @db.LongText
+  twitter String?       @db.LongText
+  mobile String?        @db.LongText
+  email String?         @db.LongText
+  address String?       @db.LongText
+  start_time DateTime?  @default(now())
+  end_time DateTime?    @default(now())
+
+  // Relations
   
 
   // Time Stamp

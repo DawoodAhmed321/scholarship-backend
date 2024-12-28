@@ -27,9 +27,25 @@ const addHomePage = async (req: Request, res: Response) => {
       },
       create: {
         title: value.title,
+        facebook: value.facebook,
+        instagram: value.instagram,
+        twitter: value.twitter,
+        address: value.address,
+        email: value.email,
+        mobile: value.mobile,
+        start_time: value.start_time,
+        end_time: value.end_time,
       },
       update: {
         title: value.title,
+        facebook: value.facebook,
+        instagram: value.instagram,
+        twitter: value.twitter,
+        address: value.address,
+        email: value.email,
+        mobile: value.mobile,
+        start_time: value.start_time,
+        end_time: value.end_time,
       },
     });
     if (!home) {
@@ -61,6 +77,11 @@ const addTestimonial = async (req: Request, res: Response) => {
       data: {
         name: value.name,
         description: value.description,
+        program: value.program,
+        university: value.university,
+        scholarshipProgram: value.scholarshipProgram,
+        session: value.session,
+
         image: {
           create: image[0],
         },
@@ -145,6 +166,10 @@ const editTestimonial = async (req: Request, res: Response) => {
       data: {
         name: value.name,
         description: value.description,
+        program: value.program,
+        university: value.university,
+        scholarshipProgram: value.scholarshipProgram,
+        session: value.session,
         image: {
           update: {
             url: image[0].url,
@@ -190,12 +215,32 @@ const getHome = async (req: Request, res: Response) => {
         },
       },
     });
+
+    const offers = await prisma.offer.findMany({
+      where: {
+        is_active: true,
+      },
+      skip: 0,
+      take: 8,
+      include: {
+        image: {
+          select: {
+            id: true,
+            url: true,
+          },
+        },
+      },
+    });
+
     if (!home) {
       notFoundResponse(res, "Home not found");
       return;
     }
     successResponse(res, "Home retrieved successfully", {
       ...home,
+      start_time: home.start_time.toTimeString().slice(0, 5),
+      end_time: home.end_time.toTimeString().slice(0, 5),
+      offers: offers.map((item) => retriveImageUrl(item, req)),
       testimonials: testimonials.map((item) => retriveImageUrl(item, req)),
     });
     return;
