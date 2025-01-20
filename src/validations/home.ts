@@ -11,6 +11,13 @@ export const homePageSchema = authSchema
     mobile: Joi.string().required().min(11).max(11),
     email: Joi.string().required().email(),
     address: Joi.string().required().min(10),
+
+    bachelor: Joi.number().required().min(0),
+    master: Joi.number().required().min(0),
+    phd: Joi.number().required().min(0),
+    internship: Joi.number().required().min(0),
+    postdoc: Joi.number().required().min(0),
+
     start_time: Joi.date().required().default(new Date()),
     end_time: Joi.date().required().default(new Date()),
   })

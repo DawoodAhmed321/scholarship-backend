@@ -48,11 +48,32 @@ const addHomePage = async (req: Request, res: Response) => {
         end_time: value.end_time,
       },
     });
+
+    const caseCount = await prisma.caseCount.upsert({
+      where: {
+        id: 1,
+      },
+      create: {
+        bachelor: value.bachelor,
+        master: value.master,
+        phd: value.phd,
+        internship: value.internship,
+        postdoc: value.postdoc,
+      },
+      update: {
+        bachelor: value.bachelor,
+        master: value.master,
+        phd: value.phd,
+        internship: value.internship,
+        postdoc: value.postdoc,
+      },
+    });
+
     if (!home) {
       notFoundResponse(res, "Home not found");
       return;
     }
-    successResponse(res, "Home updated successfully", home);
+    successResponse(res, "Home updated successfully", { home, caseCount });
     return;
   } catch (error) {
     internalServerError(res, error);

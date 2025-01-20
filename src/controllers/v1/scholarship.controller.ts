@@ -162,6 +162,26 @@ const getAllScholarships = async (req: Request, res: Response) => {
   }
 };
 
+const getCaseCounter = async (req: Request, res: Response) => {
+  try {
+    const caseCount = await prisma.caseCount.findFirst();
+    if (!caseCount) {
+      successResponse(res, "Case count retrieved successfully", {
+        bachelor: 0,
+        master: 0,
+        phd: 0,
+        internship: 0,
+        postdoc: 0,
+      });
+      return;
+    }
+    successResponse(res, "Case count retrieved successfully", caseCount);
+    return;
+  } catch (error) {
+    internalServerError(res, error);
+  }
+};
+
 const getScholarShipDetail = async (req: Request, res: Response) => {
   try {
     if (!req.body?.id) {
@@ -263,6 +283,7 @@ export {
   addScholarship,
   deleteScholarship,
   getAllScholarships,
+  getCaseCounter,
   getScholarShipDetail,
   updateScholarship,
 };

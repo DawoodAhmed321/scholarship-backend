@@ -224,9 +224,11 @@ const addTestimonials = async () => {
   }
 };
 
-adminSeed()
-  .catch(() => {})
-  .finally(async () => {
-    await addTestimonials();
-    console.log("==================== SEEDING DONE ===================");
-  });
+// adminSeed()
+//   .catch(() => {})
+//   .finally(async () => {
+//     await addTestimonials();
+//     await homePageSeed();
+//     console.log("==================== SEEDING DONE ===================");
+//   });
+homePageSeed();

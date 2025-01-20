@@ -36,6 +36,7 @@ router.delete(
 //======================================== Scholarships ==================================
 
 router.get("/scholarships", collectQueryData, Scholarship.getAllScholarships);
+router.get("/scholarships/cases", collectQueryData, Scholarship.getCaseCounter);
 router.post(
   "/scholarships",
   superAdminAuthentication,
