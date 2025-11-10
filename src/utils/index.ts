@@ -30,7 +30,7 @@ export function getPreviousWeeksMonday() {
   return previousWeeksMonday;
 }
 
-/******  26f4b788-ce78-42a2-bceb-a55740671037  *******/ export const isJSONParseable =
+export const isJSONParseable =
   (str: string) => {
     try {
       if (
@@ -169,9 +169,6 @@ export const saveImages = async (
       url: string;
     }[] = [];
     for (const file of files) {
-
-
-
       if (typeof file === "string") {
         filePaths.push({
           url: file

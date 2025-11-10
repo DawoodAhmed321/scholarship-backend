@@ -19,8 +19,10 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "https://students.scholarshipfolder.com",
-      "https://scholarshipfolder.com",
+      "https://scholarshipfolder.cloud",
+      "https://www.scholarshipfolder.cloud",
+      "http://scholarshipfolder.cloud",
+      "http://www.scholarshipfolder.cloud",
     ],
     credentials: true,
   })
