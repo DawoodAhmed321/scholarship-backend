@@ -78,6 +78,7 @@ export const saveCSV = async (
   type: "INQUIRY" | "JOIN_TEAM"
 ) => {
   try {
+    
     const filePath = path.join(
       __dirname,
       `../../public/csv/${type}-${Date.now()}.csv`
@@ -168,6 +169,9 @@ export const saveImages = async (
       url: string;
     }[] = [];
     for (const file of files) {
+
+
+
       if (typeof file === "string") {
         filePaths.push({
           url: file
@@ -177,6 +181,8 @@ export const saveImages = async (
         });
         continue;
       }
+      const folderPath = path.join(__dirname, "../../public/images", type);
+      ensureDirExists(folderPath);
       const fileName = `${type}-${Date.now()}-${file.originalFilename}`;
       const filePath = path.join(
         __dirname,
@@ -223,6 +229,8 @@ export const saveImage = async (
           .replace("https://", ""),
       };
     }
+    const folderPath = path.join(__dirname, "../../public/images", type);
+    ensureDirExists(folderPath);
     const fileName = `${type}-${Date.now()}-${file.originalFilename}`;
     const filePath = path.join(
       __dirname,
@@ -259,6 +267,8 @@ export const saveImage = async (
 
 export const saveFile = async (file: formidable.File, type: string) => {
   try {
+    const folderPath = path.join(__dirname, "../../public/images", type);
+    ensureDirExists(folderPath);
     const fileName = `${type}-${Date.now()}-${file.originalFilename}`;
     const filePath = path.join(__dirname, "../../public/files", fileName);
     fs.copyFile(file.filepath, filePath, (err) => {
@@ -282,6 +292,13 @@ export const saveFile = async (file: formidable.File, type: string) => {
       error
     );
     return false;
+  }
+};
+
+
+const ensureDirExists = (dirPath: string) => {
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
   }
 };
 
