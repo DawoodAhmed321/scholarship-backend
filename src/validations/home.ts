@@ -8,7 +8,7 @@ export const homePageSchema = authSchema
     facebook: Joi.string().required().min(6),
     instagram: Joi.string().required().min(6),
     twitter: Joi.string().required().min(6),
-    mobile: Joi.string().required().min(11).max(11),
+    mobile: Joi.string().required().min(11),
     email: Joi.string().required().email(),
     address: Joi.string().required().min(10),
 
